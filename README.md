@@ -19,9 +19,10 @@ Duplicati is able to run scripts before and after backups. This functionality is
 `--run-script-before = /script/notify_to_telegram.sh`   
 `--run-script-after = /script/notify_to_telegram.sh`
 
-To work, you need to set two required variables: 
+To work, you need to set three required variables: 
 - TELEGRAM_TOKEN
 - TELEGRAM_CHATID
+- TELEGRAM_TOPICID 
 
 These variables can be set directly in the script file or set as environment variables. If you are using docker you can use the following example to automatically install the script in the `/script/notify_to_telegram.sh` folder and set the environment variables:
 
@@ -45,7 +46,8 @@ services:
       - TZ=Europe/Berlin
       - TELEGRAM_TOKEN=<YOUR TELEGRAM TOKEN>
       - TELEGRAM_CHATID=<YOUR TELEGRAM CHAT ID>
-      - SCRIPT_URL=https://raw.githubusercontent.com/oxystin/duplicati-notify-to-telegram/main/notify_to_telegram.sh
+      - TELEGRAM_TOPICID=<YUOR TOPIC ID>
+      - SCRIPT_URL=https://raw.githubusercontent.com/GertJanH/duplicati-notify-to-telegram/main/notify_to_telegram.sh
     volumes:
       - </path/to/config>:/config
       - </path/to/script>:/script
