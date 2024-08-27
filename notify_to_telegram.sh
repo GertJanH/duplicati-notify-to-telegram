@@ -10,15 +10,17 @@
 # --run-script-before = your/path/notify_to_telegram.sh
 # --run-script-after = your/path/notify_to_telegram.sh
 
-# To work, you need to set two required variables:
+# To work, you need to set three required variables:
 #  TELEGRAM_TOKEN
 #  TELEGRAM_CHATID
+#  TELEGRAM_TOPICID (optional, only if sending to a group topic)
 # These variables can be set directly in the script file
 # or added to environment variables using other methods.
 #########################################################################
 
-#TELEGRAM_TOKEN=<your telegram token>     Еnter without quotes!!!
-#TELEGRAM_CHATID=<your telegram chatid>   Еnter without quotes!!!
+#TELEGRAM_TOKEN=<your telegram token>     Enter without quotes!!!
+#TELEGRAM_CHATID=<your telegram chatid>   Enter without quotes!!!
+#TELEGRAM_TOPICID=<your telegram topicid> Enter without quotes (optional)
 TELEGRAM_URL="https://api.telegram.org/bot$TELEGRAM_TOKEN/sendMessage"
 
 function getFriendlyFileSize() {
@@ -113,7 +115,11 @@ fi
 
 MESSAGE=\`${MESSAGE}\`
 
-
-curl -s $TELEGRAM_URL -d chat_id=$TELEGRAM_CHATID -d text="$MESSAGE" -d parse_mode="markdown" -k > /dev/null
+# Prepare the CURL command with or without message_thread_id depending on whether TELEGRAM_TOPICID is set
+if [ -z "$TELEGRAM_TOPICID" ]; then
+    curl -s $TELEGRAM_URL -d chat_id=$TELEGRAM_CHATID -d text="$MESSAGE" -d parse_mode="markdown" -k > /dev/null
+else
+    curl -s $TELEGRAM_URL -d chat_id=$TELEGRAM_CHATID -d text="$MESSAGE" -d parse_mode="markdown" -d message_thread_id=$TELEGRAM_TOPICID -k > /dev/null
+fi
 
 exit 0
