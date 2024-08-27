@@ -39,7 +39,7 @@ services:
           fi &&
           chown -R 1000:1000 /script &&
           chmod -R 744 /script && 
-          /init"
+          exec /init"
     environment:
       - PUID=0
       - PGID=0
